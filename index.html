@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nooh Bingo Game</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1c2733;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #0088cc;
+            margin-bottom: 5px;
+        }
+        p {
+            font-size: 14px;
+            color: #aaaaaa;
+        }
+        .bingo-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 320px;
+            margin: 20px auto;
+        }
+        .cell {
+            background-color: #2b394a;
+            border: 2px solid #0088cc;
+            border-radius: 8px;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.2s;
+        }
+        .cell.marked {
+            background-color: #4caf50;
+            border-color: #81c784;
+            color: #ffffff;
+        }
+        .btn {
+            background-color: #0088cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #006699;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 Nooh Bingo</h1>
+    <p>ቁጥሮቹን በመንካት ማርክ አድርግ!</p>
+
+    <div class="bingo-board" id="board"></div>
+
+    <button class="btn" onclick="generateBoard()">አዲስ ጨዋታ ጀምር 🔄</button>
+
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        function generateBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            
+            let numbers = [];
+            while (numbers.length < 25) {
+                let randomNum = Math.floor(Math.random() * 75) + 1;
+                if (!numbers.includes(randomNum)) {
+                    numbers.push(randomNum);
+                }
+            }
+
+            numbers.forEach((num, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                
+                if (index === 12) {
+                    cell.innerText = 'FREE';
+                    cell.classList.add('marked');
+                } else {
+                    cell.innerText = num;
+                    cell.onclick = function() {
+                        this.classList.toggle('marked');
+                    };
+                }
+                
+                board.appendChild(cell);
+            });
+        }
+
+        generateBoard();
+    </script>
+</body>
+</html>
